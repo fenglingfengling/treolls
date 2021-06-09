@@ -16,7 +16,9 @@ import {
     GetCardsQuery,
     PostAddCardBody,
     PutUpdateCardBody,
-    getAndValidateBoardListCard
+    PutSetCoverBody,
+    getAndValidateBoardListCard,
+    getAndValidateCardAttachment
 } from '../validators/BoardListCard';
 import {
     getAndValidateBoardList
@@ -26,6 +28,7 @@ import {Comment as CommentModel} from '../models/Comment';
 import {CardAttachment as CardAttachmentModel} from '../models/CardAttachment';
 import {Attachment as AttachmentModel} from '../models/Attachment';
 import configs from '../configs';
+import Boom from '@hapi/boom';
 
 
 @Controller('/card')
@@ -173,5 +176,119 @@ export class BoardListCardController {
         ctx.status = 204;
         return;
     }
+
+    /**
+     * 附件上传
+     */
+    @Post('/attachment')
+    public async addAttachemnt(
+        @Ctx() ctx: Context,
+        @Body() body: any
+    ) {
+
+        let {boardListCardId} = body;
+
+        let card = await getAndValidateBoardListCard(boardListCardId, ctx.userInfo.id);
+
+        //ctx.request.files.attachment;
+        if (!ctx.request.files || !ctx.request.files.attachment) {
+            throw Boom.badData('缺少附件');
+        }
+
+        let file = ctx.request.files.attachment;
+        // console.log(file);
+
+        let attachment = new AttachmentModel();
+        attachment.userId = ctx.userInfo.id;
+        attachment.originName = file.name;
+        attachment.name = file.path.split('/').pop() as string;
+        attachment.type = file.type;
+        attachment.size = file.size;
+        await attachment.save();
+
+        let cardAttachment = new CardAttachmentModel();
+        cardAttachment.userId = ctx.userInfo.id;
+        cardAttachment.boardListCardId = boardListCardId;
+        cardAttachment.attachmentId = attachment.id;
+        await cardAttachment.save();
+
+        ctx.status = 201;
+        return {
+            id: cardAttachment.id,
+            userId: cardAttachment.userId,
+            boardListCardId: cardAttachment.boardListCardId,
+            attachmentId: attachment.id,
+            path: configs.storage.prefix + '/' + attachment.name,
+            isCover: false,
+            detail: attachment
+        }
+
+    }
+
+    /**
+     * 删除附件
+     */
+    @Delete('/attachment/:id(\\d+)')
+    public async deleteAttachment(
+        @Ctx() ctx: Context,
+        @Params('id') id: number
+    ) {
+        let cardAttachment = await getAndValidateCardAttachment(id, ctx.userInfo.id);
+
+        // 这里只是移除了关联表，附件表，硬盘里存储的附件是没有删除
+        await cardAttachment.destroy();
+        ctx.status = 204;
+        return;
+    }
+
+    /**
+     * 设置封面
+     */
+    @Put('/attachment/cover/:id(\\d+)')
+    public async setCover(
+        @Ctx() ctx: Context,
+        @Params('id') id: number
+    ) {
+
+        let cardAttachment = await getAndValidateCardAttachment(id, ctx.userInfo.id);
+
+        await CardAttachmentModel.update({
+            isCover: false
+        }, {
+            where: {
+                boardListCardId: cardAttachment.boardListCardId
+            }
+        });
+
+        cardAttachment.isCover = true;
+        await cardAttachment.save();
+
+        ctx.status = 204;
+        return;
+
+    }
+
+    /**
+     * 取消封面
+     */
+    @Delete('/attachment/cover/:id(\\d+)')
+    public async deleteCover(
+        @Ctx() ctx: Context,
+        @Params('id') id: number
+    ) {
+
+        let cardAttachment = await getAndValidateCardAttachment(id, ctx.userInfo.id);
+
+        cardAttachment.isCover = false;
+        cardAttachment.save();
+
+        ctx.status = 204;
+        return;
+
+    }
+
+
+
+
 
 }

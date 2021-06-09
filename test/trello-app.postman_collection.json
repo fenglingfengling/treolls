@@ -1,0 +1,1827 @@
+{
+	"info": {
+		"_postman_id": "041442d8-6407-4b8b-aff3-71080292526f",
+		"name": "trello-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "测试",
+			"item": [
+				{
+					"name": "密码不能为空",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "085d92a2-d9be-4ee9-b7ba-4aa74d3c8cc0",
+								"exec": [
+									"pm.test('status 422', () => {",
+									"    pm.response.to.have.status(422);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"{{$randomFullName}}\",\n\t\"password\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/test/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "注册成功",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "085d92a2-d9be-4ee9-b7ba-4aa74d3c8cc0",
+								"exec": [
+									"pm.test('status 201', () => {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const Ajv = require('ajv');",
+									"const ajv = new Ajv({logger: console});",
+									"",
+									"const schema = {",
+									"  \trequired: [\"id\",\"name\", \"createAt\"],",
+									"\tproperties: {",
+									"\t\tid: {",
+									"  \t\t\ttype: \"number\"",
+									"\t\t},",
+									"      \tname: {",
+									"          \ttype: \"string\"",
+									"        },",
+									"      \tcreateAt: {",
+									"          \ttype: \"string\",",
+									"          \tformat: \"date-time\"",
+									"        }",
+									"    }",
+									"};",
+									"",
+									"// let data1 = {",
+									"//   \"id\": 5,",
+									"//   \"name\": \"Aryanna\",",
+									"//   \"createAt\": \"2020-03-27T16:00:47.464Z\"",
+									"// }",
+									"",
+									"// console.log('json', pm.response.json());",
+									"",
+									"pm.test('Schema is valid', function() {",
+									"    pm.expect(ajv.validate(schema, pm.response.json())).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"{{$randomFullName}}\",\n\t\"password\": \"123123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/test/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "授权测试",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/test/auth",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "用户",
+			"item": [
+				{
+					"name": "注册",
+					"item": [
+						{
+							"name": "用户名不能为空",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a89b6f38-6db5-4f85-9e77-42a86bb1c6ce",
+										"exec": [
+											"pm.test('stauts: 422', () => {",
+											"    pm.response.to.have.status(422);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"sdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdfsdfdsfsdfsdfsdf\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "用户名不能大于50个字符",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a89b6f38-6db5-4f85-9e77-42a86bb1c6ce",
+										"exec": [
+											"pm.test('stauts: 422', () => {",
+											"    pm.response.to.have.status(422);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/user/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "密码不能为空",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a89b6f38-6db5-4f85-9e77-42a86bb1c6ce",
+										"exec": [
+											"pm.test('stauts: 422', () => {",
+											"    pm.response.to.have.status(422);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"xxxxxx\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "两次输入密码不一致",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a89b6f38-6db5-4f85-9e77-42a86bb1c6ce",
+										"exec": [
+											"pm.test('stauts: 422', () => {",
+											"    pm.response.to.have.status(422);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"xxxxxx\",\n\t\"password\": \"123456\",\n\t\"rePassword\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "注册成功",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a89b6f38-6db5-4f85-9e77-42a86bb1c6ce",
+										"exec": [
+											"const Ajv = require('ajv');",
+											"const ajv = new Ajv({logger: console});",
+											"",
+											"const schema = {",
+											"    required: ['id', 'name', 'createdAt'],",
+											"    properties: {",
+											"        id: {",
+											"            type: 'number'",
+											"        },",
+											"        name: {",
+											"            type: 'string'",
+											"        },",
+											"        createdAt: {",
+											"            type: 'string',",
+											"            format: 'date-time'",
+											"        }",
+											"    }",
+											"}",
+											"",
+											"",
+											"pm.test('stauts: 201', () => {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test('schema', () => {",
+											"   pm.expect( ajv.validate(schema, pm.response.json()) ).to.be.true; ",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"{{$randomUserName}}\",\n\t\"password\": \"123456\",\n\t\"rePassword\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "登录",
+					"item": [
+						{
+							"name": "成功登录",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"zmouse\",\n\t\"password\": \"123456\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/user/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "面板",
+			"item": [
+				{
+					"name": "添加",
+					"item": [
+						{
+							"name": "缺少参数或参数格式不正确",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5b283136-e043-4b8c-84c1-4ff17d81cc8f",
+										"exec": [
+											"pm.test('Status: 422', () => {",
+											"    pm.response.to.have.status(422);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board"
+									]
+								},
+								"description": "缺少参数或参数格式不正确"
+							},
+							"response": []
+						},
+						{
+							"name": "成功添加一个新的面板",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5b283136-e043-4b8c-84c1-4ff17d81cc8f",
+										"exec": [
+											"pm.test('Status: 201', () => {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"{{$randomLoremWords}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/board",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board"
+									]
+								},
+								"description": "成功添加一个新的面板"
+							},
+							"response": []
+						}
+					],
+					"description": "添加",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "获取当前登陆用户的所有看板",
+					"item": [
+						{
+							"name": "获取当前登陆用户的所有看板",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e7bde975-7bc1-4074-a5bf-1835765f4d94",
+										"exec": [
+											"pm.test('Status: 200', () => {",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    pm.expect( pm.response.json() ).to.be.an('array').that.not.empty;",
+											"    pm.expect( pm.response.json()[0] ).to.include.all.keys('id');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board"
+									]
+								},
+								"description": "获取当前登陆用户的所有看板"
+							},
+							"response": []
+						}
+					],
+					"description": "获取当前登陆用户的所有看板",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9d2e0761-55da-46ee-b720-dca3c7599273",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "c871f7ae-8153-4159-be3e-1de5eb1283a0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "获取指定面板",
+					"item": [
+						{
+							"name": "指定看板不存在",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7e5f44e9-1de1-4c14-b11c-4fd5039de870",
+										"exec": [
+											"pm.test('Status: 404', () => {",
+											"    pm.response.to.be.notFound;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/a",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"a"
+									]
+								},
+								"description": "指定看板不存在"
+							},
+							"response": []
+						},
+						{
+							"name": "禁止访问该面板",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2aaac9ba-923a-4e52-99b8-45a363075e7d",
+										"exec": [
+											"pm.test('Status: 401', () => {",
+											"    pm.response.to.be.unauthorized;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"3"
+									]
+								},
+								"description": "禁止访问该面板"
+							},
+							"response": []
+						},
+						{
+							"name": "成功获取到指定面板信息",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c9870115-a456-43e8-895f-cb8d52fb0ca8",
+										"exec": [
+											"pm.test('Status: 200', () => {",
+											"    pm.response.to.be.ok;",
+											"    ",
+											"    pm.expect( pm.response.json() ).to.includes.all.keys('id', 'userId', 'name');",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"1"
+									]
+								},
+								"description": "成功获取到指定面板信息"
+							},
+							"response": []
+						}
+					],
+					"description": "获取指定面板",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "更新指定面板",
+					"item": [
+						{
+							"name": "要更新的看板不存在",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d9826388-1d59-40c9-a7ca-563bc38fc6bd",
+										"exec": [
+											"pm.test('Status: 404', () => {",
+											"    pm.response.to.have.notFound;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/1000",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"1000"
+									]
+								},
+								"description": "要更新的看板不存在"
+							},
+							"response": []
+						},
+						{
+							"name": "没有权限修改指定的看板",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d9826388-1d59-40c9-a7ca-563bc38fc6bd",
+										"exec": [
+											"pm.test('Status: 401', () => {",
+											"    pm.response.to.have.unauthorized;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"1"
+									]
+								},
+								"description": "没有权限修改指定的看板"
+							},
+							"response": []
+						},
+						{
+							"name": "成功更新指定的看板",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d9826388-1d59-40c9-a7ca-563bc38fc6bd",
+										"exec": [
+											"pm.test('Status: 204', () => {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"{{$randomLoremWords}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/board/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"1"
+									]
+								},
+								"description": "成功更新指定的看板"
+							},
+							"response": []
+						}
+					],
+					"description": "更新指定面板",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "删除指定面板",
+					"item": [
+						{
+							"name": "要删除的看板不存在",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d9826388-1d59-40c9-a7ca-563bc38fc6bd",
+										"exec": [
+											"pm.test('Status: 404', () => {",
+											"    pm.response.to.have.notFound;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/1000",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"1000"
+									]
+								},
+								"description": "要删除的看板不存在"
+							},
+							"response": []
+						},
+						{
+							"name": "没有权限删除指定的看板",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d9826388-1d59-40c9-a7ca-563bc38fc6bd",
+										"exec": [
+											"pm.test('Status: 401', () => {",
+											"    pm.response.to.have.unauthorized;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"1"
+									]
+								},
+								"description": "没有权限删除指定的看板"
+							},
+							"response": []
+						},
+						{
+							"name": "成功删除指定的面板",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d9826388-1d59-40c9-a7ca-563bc38fc6bd",
+										"exec": [
+											"pm.test('Status: 204', () => {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "ad2ab38b-90f5-4f0b-aacc-f441f54cf9d5",
+										"exec": [
+											"pm.sendRequest({",
+											"    url: `${pm.collectionVariables.get(\"baseUrl\")}/board`,",
+											"    method: 'POST',",
+											"    header: [",
+											"        {",
+											"            key: 'authorization',",
+											"            value: `${pm.collectionVariables.get('token')}`",
+											"        },",
+											"        {",
+											"            key: 'Content-Type',",
+											"            value: 'application/json'",
+											"        }",
+											"    ],",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            name: `名字`",
+											"        })",
+											"    }",
+											"}, (err, res) => {",
+											"    if (err) { console.log('err', err); }",
+											"    console.log(res.json());",
+											"    let {id} = res.json();",
+											"    pm.collectionVariables.set('deleteId', id);",
+											"});",
+											"",
+											"",
+											"// console.log('........')",
+											"",
+											"// pm.collectionVariables.set('deleteId', 20);",
+											"// console.log(pm.collectionVariables.get('deleteId'));"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/board/{{deleteId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"board",
+										"{{deleteId}}"
+									]
+								},
+								"description": "成功删除指定的面板"
+							},
+							"response": []
+						}
+					],
+					"description": "删除指定面板",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"description": "面板",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "列表",
+			"item": [
+				{
+					"name": "添加",
+					"item": [
+						{
+							"name": "成功添加一个列表",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "29963735-55dd-4934-a07a-3895d4cb8f93",
+										"exec": [
+											"pm.test('Status: 201', () => {",
+											"    pm.response.to.have.status(201);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"boardId\": 1,\n\t\"name\": \"{{$randomLoremWords}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/list",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list"
+									]
+								},
+								"description": "成功添加一个列表"
+							},
+							"response": []
+						},
+						{
+							"name": "指定面板不存在",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "29963735-55dd-4934-a07a-3895d4cb8f93",
+										"exec": [
+											"pm.test('Status: 404', () => {",
+											"    pm.response.to.have.status(404);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"boardId\": 100000,\n\t\"name\": \"{{$randomLoremWords}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/list",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list"
+									]
+								},
+								"description": "成功添加一个列表"
+							},
+							"response": []
+						}
+					],
+					"description": "添加",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "获取当前登陆用户指定看板下的所有列表",
+					"item": [
+						{
+							"name": "成功获取一组列表",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "aa053420-b5e2-4f03-b3ec-3f852bb5b512",
+										"exec": [
+											"pm.test('Status: 200', () => {",
+											"    pm.response.to.have.ok;",
+											"    ",
+											"    pm.expect(pm.response.json()).to.be.an('array');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/list?boardId=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list"
+									],
+									"query": [
+										{
+											"key": "boardId",
+											"value": "1"
+										}
+									]
+								},
+								"description": "成功获取一组列表"
+							},
+							"response": []
+						}
+					],
+					"description": "获取当前登陆用户指定看板下的所有列表",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "获取指定的列表",
+					"item": [
+						{
+							"name": "成功获取一个指定的列表信息",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ac7f5eba-c038-4be6-ae8c-46105f5bf7d9",
+										"exec": [
+											"pm.test('Status: 200', () => {",
+											"    pm.response.to.have.ok;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/list/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list",
+										"1"
+									]
+								},
+								"description": "成功获取一个指定的列表信息"
+							},
+							"response": []
+						}
+					],
+					"description": "获取指定的列表",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "41497472-fb77-41f5-8bdc-4fc2f4ab594f",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9528b927-b956-49b3-90a3-47c447efc3d1",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "更新指定的列表",
+					"item": [
+						{
+							"name": "成功更新一个指定的列表信息",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7c6553c8-3180-4e27-9e7f-6927973069bc",
+										"exec": [
+											"pm.test('Status: 204', () => {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"{{$randomLoremWords}}\",\n\t\"order\": {{$randomInt}}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/list/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list",
+										"1"
+									]
+								},
+								"description": "成功更新一个指定的列表信息"
+							},
+							"response": []
+						}
+					],
+					"description": "更新指定的列表",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d1d04570-9fa3-4009-8787-86b7afba476e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b1c0f95b-768a-468d-afb8-7b9d5381e104",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "删除指定的列表",
+					"item": [
+						{
+							"name": "成功删除一个指定的列表",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "f00a6c3e-a552-4d7b-9ca2-1d579fe27c4b",
+										"exec": [
+											"pm.sendRequest({",
+											"    url: `${pm.collectionVariables.get(\"baseUrl\")}/list`,",
+											"    method: 'POST',",
+											"    header: [",
+											"        {",
+											"            key: 'authorization',",
+											"            value: `${pm.collectionVariables.get('token')}`",
+											"        },",
+											"        {",
+											"            key: 'Content-Type',",
+											"            value: 'application/json'",
+											"        }",
+											"    ],",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            boardId: 1,",
+											"            name: `名字`",
+											"        })",
+											"    }",
+											"}, (err, res) => {",
+											"    if (err) { console.log('err', err); }",
+											"    console.log(res.json());",
+											"    let {id} = res.json();",
+											"    pm.collectionVariables.set('deleteId', id);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "f1ac973e-a6da-4da2-8424-0744c4073276",
+										"exec": [
+											"pm.test('Status: 204', () => {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/list/{{deleteId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"list",
+										"{{deleteId}}"
+									]
+								},
+								"description": "成功删除一个指定的列表"
+							},
+							"response": []
+						}
+					],
+					"description": "删除指定的列表",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"description": "列表",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "卡片",
+			"item": [
+				{
+					"name": "添加",
+					"item": [
+						{
+							"name": "成功添加一个卡片",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "08e35f55-0829-4820-bc24-6d39b4da18fe",
+										"exec": [
+											"pm.test('Status: 201', () => {",
+											"    pm.response.to.have.status(201);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"boardListId\": 1,\n\t\"name\": \"{{$randomLoremWords}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/card",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"card"
+									]
+								},
+								"description": "成功添加一个卡片"
+							},
+							"response": []
+						}
+					],
+					"description": "添加",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "获取当前登陆用户指定列表下的所有卡片",
+					"item": [
+						{
+							"name": "成功获取当前登陆用户指定列表下的所有卡片",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "07c2060e-5db4-430c-80e1-d79ef2dde3d9",
+										"exec": [
+											"pm.test('Status: 200', () => {",
+											"    pm.response.to.have.ok;",
+											"    pm.expect( pm.response.json() ).to.be.an('array');",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/card?boardListId=2",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"card"
+									],
+									"query": [
+										{
+											"key": "boardListId",
+											"value": "2"
+										}
+									]
+								},
+								"description": "成功获取当前登陆用户指定列表下的所有卡片"
+							},
+							"response": []
+						}
+					],
+					"description": "获取当前登陆用户指定列表下的所有卡片",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "获取指定的卡片",
+					"item": [
+						{
+							"name": "成功获取指定的卡片",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f27829ca-2724-4089-8e22-fcf5a9002db1",
+										"exec": [
+											"pm.test(\"Statu: 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followAuthorizationHeader": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/card/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"card",
+										"1"
+									]
+								},
+								"description": "成功获取指定的卡片"
+							},
+							"response": []
+						}
+					],
+					"description": "获取指定的卡片",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6a6d7823-1ee3-4c8e-9099-42570aa976e9",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "50657f13-77fc-4ea2-98e2-ac5def2f920e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "更新指定的卡片",
+					"item": [
+						{
+							"name": "成功更新一个指定的卡片",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "bed6846e-9bb5-48cb-8ae5-75e9b9ced1cf",
+										"exec": [
+											"pm.test('Status: 204', () => {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"boardListId\": 2,\n\t\"name\": \"{{$randomLoremWords}}\",\n\t\"order\": {{$randomInt}}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/card/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"card",
+										"1"
+									]
+								},
+								"description": "成功更新一个指定的卡片"
+							},
+							"response": []
+						}
+					],
+					"description": "更新指定的卡片",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "删除指定的卡片",
+					"item": [
+						{
+							"name": "成功删除指定的卡片",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "bab94571-38cc-4827-b057-a234e25d4d53",
+										"exec": [
+											"pm.sendRequest({",
+											"    url: `${pm.collectionVariables.get(\"baseUrl\")}/card`,",
+											"    method: 'POST',",
+											"    header: [",
+											"        {",
+											"            key: 'authorization',",
+											"            value: `${pm.collectionVariables.get('token')}`",
+											"        },",
+											"        {",
+											"            key: 'Content-Type',",
+											"            value: 'application/json'",
+											"        }",
+											"    ],",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            boardListId: 1,",
+											"            name: `名字`",
+											"        })",
+											"    }",
+											"}, (err, res) => {",
+											"    if (err) { console.log('err', err); }",
+											"    console.log(res.json());",
+											"    let {id} = res.json();",
+											"    pm.collectionVariables.set('deleteId', id);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "bbd73dbe-5b9d-4905-ab1d-64c1259066f2",
+										"exec": [
+											"pm.test('Status: 204', () => {",
+											"    pm.response.to.have.status(204);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/card/{{deleteId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"card",
+										"{{deleteId}}"
+									]
+								},
+								"description": "成功删除指定的卡片"
+							},
+							"response": []
+						}
+					],
+					"description": "删除指定的卡片",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "上传附件",
+					"item": [
+						{
+							"name": "成功上传一个附件",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "boardListCardId",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "attachment",
+											"type": "file",
+											"src": "/Users/zhongyi/Pictures/开课吧/logo.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/card/attachment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"card",
+										"attachment"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"description": "卡片",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "评论",
+			"item": [
+				{
+					"name": "添加评论",
+					"item": [
+						{
+							"name": "成功添加一条评论",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"boardListCardId\": 1,\n\t\"content\": \"测试\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/comment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"comment"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "获取评论",
+					"item": [
+						{
+							"name": "成功获取一组评论",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/comment?boardListCardId=1&page=3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"comment"
+									],
+									"query": [
+										{
+											"key": "boardListCardId",
+											"value": "1"
+										},
+										{
+											"key": "page",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a4636dcc-8890-461f-92ac-1b80d270787f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ad1be3ff-c1d8-4dea-922c-e0053a274471",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "39035532-66b1-4f95-b1f5-718c5b308149",
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api/v1",
+			"type": "string"
+		},
+		{
+			"id": "fcd651a2-3980-4c18-a1ca-2d4e22355cee",
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6InpNb3VzZSIsImlhdCI6MTU4NDA5MTU0NX0.MOcH-PN7ihb5yx_2aS4qsmm7SKWQxUuBzf4rcfOw-Mc",
+			"type": "string"
+		},
+		{
+			"id": "07d0a8ee-0fcf-437f-a107-da1480c68ae3",
+			"key": "deleteId",
+			"value": 12,
+			"type": "number"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -63,18 +63,20 @@
                                         {{attachment.createdAt|dateTime}}
                                     </span>
                                     <span> - </span>
-                                    <u>删除</u>
+                                    <u @click="removeAttachment(attachment.id)">删除</u>
                                 </span>
                                 <span class="attachment-thumbnail-operation">
                                     <i class="icon icon-card-cover"></i>
-                                    <u>移除封面</u>
+                                    <u v-if="attachment.isCover" @click="removeCover(attachment.id)">移除封面</u>
+                                    <u v-else @click="setCover(attachment.id)">设为封面</u>
                                 </span>
                             </p>
                         </li>
                     </ul>
 
                     <div>
-                        <button class="btn btn-edit">添加附件</button>
+                        <button class="btn btn-edit" @click="$refs.attachment.click()">添加附件</button>
+                        <input type="file" ref="attachment" style="display: none" @change="uploadAttachment">
                     </div>
 
                 </div>
@@ -91,124 +93,7 @@
                         </div>
                     </div>
 
-                    <div class="comment-post">
-                        <div class="avatar">
-                            <span>Z</span>
-                        </div>
-                        <div class="comment-content-box editing">
-                            <textarea class="comment-content-input" placeholder="添加评论……"></textarea>
-                            <button class="btn btn-edit">保存</button>
-                        </div>
-                    </div>
-
-                    <ul class="comments">
-                        <li class="comment">
-                            <div class="avatar">
-                                <span>Z</span>
-                            </div>
-                            <div class="description">
-                                <div class="header">
-                                    <strong>zMouse</strong>
-                                    <span> at </span>
-                                    <i>2019年12月29日晚上11点04分</i>
-                                </div>
-                                <div class="content">
-                                    非常不错！！
-                                </div>
-                            </div>
-                        </li>
-                        <li class="comment">
-                            <div class="avatar">
-                                <span>Z</span>
-                            </div>
-                            <div class="description">
-                                <div class="header">
-                                    <strong>zMouse</strong>
-                                    <span> at </span>
-                                    <i>2019年12月29日晚上11点04分</i>
-                                </div>
-                                <div class="content">
-                                    非常不错！！
-                                </div>
-                            </div>
-                        </li>
-                        <li class="comment">
-                            <div class="avatar">
-                                <span>Z</span>
-                            </div>
-                            <div class="description">
-                                <div class="header">
-                                    <strong>zMouse</strong>
-                                    <span> at </span>
-                                    <i>2019年12月29日晚上11点04分</i>
-                                </div>
-                                <div class="content">
-                                    非常不错！！
-                                </div>
-                            </div>
-                        </li>
-                        <li class="comment">
-                            <div class="avatar">
-                                <span>Z</span>
-                            </div>
-                            <div class="description">
-                                <div class="header">
-                                    <strong>zMouse</strong>
-                                    <span> at </span>
-                                    <i>2019年12月29日晚上11点04分</i>
-                                </div>
-                                <div class="content">
-                                    非常不错！！
-                                </div>
-                            </div>
-                        </li>
-                        <li class="comment">
-                            <div class="avatar">
-                                <span>Z</span>
-                            </div>
-                            <div class="description">
-                                <div class="header">
-                                    <strong>zMouse</strong>
-                                    <span> at </span>
-                                    <i>2019年12月29日晚上11点04分</i>
-                                </div>
-                                <div class="content">
-                                    非常不错！！
-                                </div>
-                            </div>
-                        </li>
-                        <li class="comment">
-                            <div class="avatar">
-                                <span>Z</span>
-                            </div>
-                            <div class="description">
-                                <div class="header">
-                                    <strong>zMouse</strong>
-                                    <span> at </span>
-                                    <i>2019年12月29日晚上11点04分</i>
-                                </div>
-                                <div class="content">
-                                    非常不错！！
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <div class="comment-pagination">
-                        <div class="pagination">
-                            <span>首页</span>
-                            <span>上一页</span>
-                            <span>...</span>
-                            <span>4</span>
-                            <span>5</span>
-                            <span class="current-page">6</span>
-                            <span>7</span>
-                            <span>8</span>
-                            <span>...</span>
-                            <span>下一页</span>
-                            <span>尾页</span>
-                        </div>
-                    </div>
+                    <t-comment :card-id="card.id"></t-comment>
 
                 </div>
 
@@ -220,9 +105,14 @@
 <script>
 
     import dateTime from '@/filters/dateTime';
+    import TComment from "@/components/TComment";
 
     export default {
         name: 'Card',
+
+        components: {
+            TComment
+        },
 
         filters: {
             dateTime
@@ -267,6 +157,62 @@
 
                         this.$message.success('卡片简介修改成功');
                     } catch (e) {}
+                }
+            },
+
+            // 上传附件
+            uploadAttachment() {
+                let file = this.$refs.attachment.files[0];
+
+                try {
+                    this.$store.dispatch('card/uploadAttachment', {
+                        boardListCardId: this.card.id,
+                        file
+                    });
+
+                    this.$refs.attachment.value = '';
+                    this.$message.success('上传成功');
+                } catch (e) {
+
+                }
+            },
+
+            removeAttachment(id) {
+                try {
+                    this.$store.dispatch('card/removeAttachment', {
+                        cardId: this.card.id,
+                        id
+                    });
+
+                    this.$message.success('封面移除成功');
+                } catch (e) {
+
+                }
+            },
+
+            setCover(id) {
+                try {
+                    this.$store.dispatch('card/setCover', {
+                        cardId: this.card.id,
+                        id
+                    });
+
+                    this.$message.success('封面设置成功');
+                } catch (e) {
+
+                }
+            },
+
+            removeCover(id) {
+                try {
+                    this.$store.dispatch('card/removeCover', {
+                        cardId: this.card.id,
+                        id
+                    });
+
+                    this.$message.success('封面取消成功');
+                } catch (e) {
+
                 }
             }
         }

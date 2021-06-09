@@ -3,7 +3,7 @@ import Koa, {Context, Next} from 'koa';
 import {bootstrapControllers} from 'koa-ts-controllers';
 import KoaRouter from 'koa-router';
 import path from 'path';
-import KoaBodyParser from 'koa-bodyparser';
+import KoaBody from 'koa-body';
 import Boom from '@hapi/Boom';
 import {Sequelize} from 'sequelize-typescript';
 import jwt from 'jsonwebtoken';
@@ -74,7 +74,13 @@ import KoaStaticCache from 'koa-static-cache';
         throw Boom.notFound('没有该路由');
     });
 
-    app.use( KoaBodyParser() );
+    app.use( KoaBody({
+        multipart: true,
+        formidable: {
+            uploadDir: configs.storage.dir,
+            keepExtensions: true
+        }
+    }) );
     app.use( router.routes() );
 
     app.listen( configs.server.port, configs.server.host, () => {

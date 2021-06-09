@@ -6,6 +6,7 @@ import {
     IsNumber
 } from 'class-validator';
 import {BoardListCard as BoardListCardModel} from '../models/BoardListCard';
+import {CardAttachment as CardAttachmentModel} from '../models/CardAttachment';
 import Boom from '@hapi/Boom';
 
 export class GetCardsQuery {
@@ -67,6 +68,14 @@ export class PutUpdateCardBody {
     order?: number;
 }
 
+export class PutSetCoverBody {
+
+    @Min(1, {
+        message: '附件id必须为数字'
+    })
+    attachmentId: number;
+}
+
 export async function getAndValidateBoardListCard(id: number, userId: number): Promise<BoardListCardModel> {
     let board = await BoardListCardModel.findByPk(id);
 
@@ -76,6 +85,20 @@ export async function getAndValidateBoardListCard(id: number, userId: number): P
 
     if (board.userId !== userId) {
         throw Boom.forbidden('禁止访问该列表');
+    }
+
+    return board;
+}
+
+export async function getAndValidateCardAttachment(id: number, userId: number): Promise<CardAttachmentModel> {
+    let board = await CardAttachmentModel.findByPk(id);
+
+    if (!board) {
+        throw Boom.notFound('指定附件不存在');
+    }
+
+    if (board.userId !== userId) {
+        throw Boom.forbidden('禁止访问该附件');
     }
 
     return board;

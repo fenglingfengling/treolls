@@ -132,3 +132,53 @@ export const putCard = data => {
         }
     })
 };
+
+// 上传附件
+export const uploadAttachment = data => {
+    let fd = new FormData();
+    fd.append('boardListCardId', data.boardListCardId);
+    fd.append('attachment', data.file);
+
+    return axios({
+        method: 'post',
+        url: '/card/attachment',
+        data: fd
+    })
+};
+// 删除附件
+export const removeAttachment = data => {
+    return axios({
+        method: 'delete',
+        url: '/card/attachment/' + data.id
+    });
+};
+// 设置封面
+export const setCover = data => {
+    return axios({
+        method: 'put',
+        url: '/card/attachment/cover/' + data.id
+    });
+};
+// 移除封面
+export const removeCover = data => {
+    return axios({
+        method: 'delete',
+        url: '/card/attachment/cover/' + data.id
+    });
+};
+
+// 获取评论列表
+export const getComments = params => {
+    return axios({
+        url: '/comment',
+        params
+    })
+};
+// 添加评论
+export const postComment = data => {
+    return axios({
+        method: 'post',
+        url: '/comment',
+        data
+    })
+};
